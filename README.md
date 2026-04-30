@@ -32,6 +32,7 @@ The RPC URL is auto-detected from the `chainId` in the JSON using viem's chain r
 |--------|-------------|
 | `--safe-address <address>` | Safe address to simulate against. Required when `meta.createdFromSafeAddress` is absent from the JSON. |
 | `--chain-id <id>` | Override the chain ID from the JSON. |
+| `-v` `-vv` `-vvv` `-vvvv` `-vvvvv` | Trace verbosity (default: `-vvvv`). |
 | `RPC_URL=<url>` | Override the auto-detected RPC URL. Required for chains not in viem's registry. |
 
 ## Input format
@@ -40,7 +41,7 @@ The script expects a JSON export from Safe's Transaction Builder app (`New trans
 
 ## Interpreting the output
 
-The `-vvvv` flag is always enabled, printing the full call trace for every subcall.
+The default verbosity is `-vvvv`, printing the full call trace for every subcall. Use `-vv` for a concise summary (logs only) or `-vvvvv` for maximum detail including setup traces.
 
 | Output | Meaning |
 |--------|---------|
