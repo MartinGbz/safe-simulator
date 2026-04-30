@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {Script, console} from "forge-std/Script.sol";
-import {ISafe} from "../src/ISafe.sol";
+import {ISafe} from "../src/interfaces/ISafe.sol";
 
 contract SimulateSafe is Script {
     // Safe MultiSend v1.4.1 — CREATE2, same address on all standard EVM chains
@@ -24,11 +24,12 @@ contract SimulateSafe is Script {
 
         uint256 nonce = safe.nonce();
         address[] memory owners = safe.getOwners();
+        require(owners.length > 0, "Safe has no owners");
         address owner = owners[0];
 
-        console.log("Safe:  ", safeAddress);
-        console.log("Owner: ", owner);
-        console.log("Nonce: ", nonce);
+        console.log("Safe: ", safeAddress);
+        console.log("Owner:", owner);
+        console.log("Nonce:", nonce);
 
         bytes32 txHash = safe.getTransactionHash(
             MULTI_SEND,
@@ -43,7 +44,7 @@ contract SimulateSafe is Script {
             nonce
         );
 
-        console.logBytes32(txHash);
+        console.log("Tx hash:", vm.toString(txHash));
 
         // Override threshold to 1 so only one signature is needed
         vm.store(safeAddress, bytes32(uint256(THRESHOLD_SLOT)), bytes32(uint256(1)));
