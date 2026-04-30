@@ -1,0 +1,8 @@
+{
+  "name": "safe-simulator",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "viem": "^2.0.0"
+  }
+}
