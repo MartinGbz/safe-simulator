@@ -48,6 +48,18 @@ function toAbiParam(input: AbiInput): AbiParameter {
   return param;
 }
 
+function parseArrayString(value: string): unknown[] {
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return parsed;
+  } catch {
+    // fall through to bracket-split fallback for unquoted addresses: [0xABC, 0xDEF]
+  }
+  const inner = value.trim().replace(/^\[/, '').replace(/\]$/, '').trim();
+  if (inner === '') return [];
+  return inner.split(',').map((s) => s.trim());
+}
+
 function parseArgValue(value: string, type: string, inputName: string, fnName: string): unknown {
   if (type === 'tuple' || type.startsWith('tuple[')) {
     try {
@@ -57,6 +69,9 @@ function parseArgValue(value: string, type: string, inputName: string, fnName: s
         `Invalid JSON for tuple input "${inputName}" of function "${fnName}": ${value}`,
       );
     }
+  }
+  if (type.endsWith('[]') || /\[\d+\]$/.test(type)) {
+    return parseArrayString(value);
   }
   return value;
 }
